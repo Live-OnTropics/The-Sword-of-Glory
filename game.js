@@ -2,88 +2,149 @@
 const mapContainer = document.getElementById("map-container");
 const infoPanel = document.getElementById("info-panel");
 let currentCountry = null;
+let countries = [];
+let tiles = [];
 
-// Tile data structure: Each tile has a type, and country (for simplicity)
-const tiles = [];
+// Define resources
+const resources = {
+    steel: 0,
+    oil: 0,
+    manpower: 0,
+    money: 0
+};
 
-// Initialize the map grid with hexagonal tiles
+// Define the country class
+class Country {
+    constructor(name, color) {
+        this.name = name;
+        this.color = color;
+        this.tiles = [];
+        this.militaryUnits = [];
+        this.resources = { ...resources };
+    }
+
+    // Add a tile to the country
+    addTile(tile) {
+        this.tiles.push(tile);
+        tile.country = this;
+        tile.setColor(this.color);
+    }
+
+    // Build a unit
+    buildUnit(type) {
+        if (this.resources.money >= 100) {
+            this.resources.money -= 100;
+            const unit = new MilitaryUnit(type, this);
+            this.militaryUnits.push(unit);
+        }
+    }
+}
+
+// Define the tile class
+class Tile {
+    constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.type = type; // city, forest, water, etc.
+        this.country = null;
+    }
+
+    // Change the tile's color when controlled by a country
+    setColor(color) {
+        const hex = document.querySelector(`.hex[data-x="${this.x}"][data-y="${this.y}"]`);
+        hex.style.backgroundColor = color;
+    }
+}
+
+// Define military units
+class MilitaryUnit {
+    constructor(type, country) {
+        this.type = type; // e.g., infantry, tank
+        this.country = country;
+        this.location = null; // Tile where unit is located
+    }
+
+    // Move the unit to a different tile
+    move(newTile) {
+        if (this.location) {
+            this.location.country = null;
+        }
+        this.location = newTile;
+        newTile.country = this.country;
+    }
+}
+
+// Initialize map
 function initializeMap(rows, cols) {
     const hexWidth = 60;
     const hexHeight = 60;
-    const offsetX = 0;
-    const offsetY = 0;
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-            let tileType = 'city'; // Default to city for simplicity
-            if (Math.random() < 0.1) tileType = 'water'; // Randomly make some water tiles
-            tiles.push({x, y, type: tileType, country: null});
+            const tileType = Math.random() < 0.1 ? 'water' : 'city'; // 10% chance to be water
+            const tile = new Tile(x, y, tileType);
+            tiles.push(tile);
+
             const hex = document.createElement('div');
             hex.classList.add('hex');
+            hex.setAttribute('data-x', x);
+            hex.setAttribute('data-y', y);
             hex.style.left = `${x * (hexWidth * 0.75)}px`;
             hex.style.top = `${y * (hexHeight * 0.87)}px`;
 
-            // Attach event listener for tile interactions
-            hex.addEventListener('click', () => handleTileClick(x, y));
+            hex.addEventListener('click', () => handleTileClick(tile));
 
             mapContainer.appendChild(hex);
         }
     }
 }
 
-// Handle tile click event
-function handleTileClick(x, y) {
-    const clickedTile = tiles.find(tile => tile.x === x && tile.y === y);
-    if (clickedTile.type === 'water') {
-        alert("This is a water tile. Cannot build or control.");
+// Handle tile clicks
+function handleTileClick(tile) {
+    if (tile.country) {
+        alert(`You clicked on ${tile.country.name}'s tile!`);
     } else {
-        // If the tile is a city, display info about the country there
-        if (clickedTile.country) {
-            alert(`You clicked on ${clickedTile.country}'s city!`);
-        } else {
-            alert("This is an unclaimed city.");
-        }
+        alert("This is an unclaimed city or land.");
     }
 }
 
-// Set up the country in a tile
-function placeCountry(countryName, x, y) {
-    const tile = tiles.find(tile => tile.x === x && tile.y === y);
+// Place countries on the map
+function placeCountry(country, x, y) {
+    const tile = tiles.find(t => t.x === x && t.y === y);
     if (tile && tile.type === 'city') {
-        tile.country = countryName;
+        country.addTile(tile);
     }
 }
 
-// Set up the game with 10x10 grid
-initializeMap(10, 10);
+// Create some countries
+const germany = new Country("Germany", "green");
+const france = new Country("France", "blue");
+countries.push(germany, france);
 
-// Example: Placing a country in a few tiles
-placeCountry('Germany', 1, 1);
-placeCountry('France', 3, 3);
+// Place countries
+placeCountry(germany, 1, 1);
+placeCountry(france, 3, 3);
 
-// End turn functionality (for later game mechanics)
+// Display country info
+function displayCountryInfo(country) {
+    document.getElementById('current-country').textContent = `Current Country: ${country.name}`;
+    document.getElementById('resources').textContent = `Resources: Steel: ${country.resources.steel}, Oil: ${country.resources.oil}, Manpower: ${country.resources.manpower}, Money: ${country.resources.money}`;
+}
+
+// Example of building units
+germany.buildUnit("infantry");
+
+// End Turn button functionality
 document.getElementById("end-turn").addEventListener("click", () => {
     alert("Ending turn...");
-    // Example: Here, we could trigger AI actions and other mechanics
+    // Example: Here, we could trigger AI actions and other mechanics like building units or declaring war
+    simpleAI(germany);
 });
 
-// Display current country info when selected
-function displayCountryInfo(countryName) {
-    document.getElementById('current-country').textContent = `Current Country: ${countryName}`;
+// Simple AI behavior for now
+function simpleAI(country) {
+    alert(`${country.name} AI is making moves!`);
+    country.buildUnit("tank"); // Example AI action
 }
 
-// Simple AI system to perform actions
-function simpleAI(countryName) {
-    // Example: AI builds a unit for the country
-    alert(`${countryName} is building a unit.`);
-    // Example: AI declares war on a neighboring country
-    declareWar('Germany', 'France');
-}
-
-// Declare war function (simple)
-function declareWar(attacker, defender) {
-    alert(`${attacker} declares war on ${defender}.`);
-}
-
-// Example: Run simple AI for 'Germany' and 'France'
-simpleAI('Germany');
-simpleAI('France');
+// Initialize map with 10x10 grid
+initializeMap(10, 10);
