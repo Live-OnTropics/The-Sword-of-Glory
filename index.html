@@ -3,28 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Sword of Glory - v0.0.4</title>
+  <title>The Sword of Glory - v0.0.5</title>
   <link rel="stylesheet" href="styles.css">
   <script src="game.js" defer></script>
 </head>
 <body>
-  <div id="game-ui">
-    <!-- Sidebar -->
-    <div id="sidebar">
-      <h1>The Sword of Glory</h1>
-      <h2>Country Overview</h2>
-      <div id="resources">
+  <header id="game-header">
+    <img src="logo.png" alt="The Sword of Glory Logo" id="game-logo">
+    <h1>The Sword of Glory</h1>
+  </header>
+
+  <main id="game-container">
+    <aside id="sidebar">
+      <div id="country-info">
+        <h2>Your Country</h2>
         <p><strong>Oil:</strong> <span id="oil">1000</span></p>
         <p><strong>Steel:</strong> <span id="steel">1000</span></p>
         <p><strong>Food:</strong> <span id="food">1000</span></p>
         <p><strong>Manpower:</strong> <span id="manpower">1000</span></p>
       </div>
-      <h3>Controlled Territories</h3>
-      <ul id="territories"></ul>
-    </div>
+      <div id="controls">
+        <h2>Game Controls</h2>
+        <button id="zoom-in">Zoom In</button>
+        <button id="zoom-out">Zoom Out</button>
+        <button id="reset-view">Reset View</button>
+      </div>
+    </aside>
 
-    <!-- Game Map -->
-    <canvas id="game-map" width="800" height="800"></canvas>
-  </div>
+    <section id="map-container">
+      <canvas id="game-map"></canvas>
+    </section>
+  </main>
+
+  <footer id="game-footer">
+    <p>© 2024 The Sword of Glory. All rights reserved.</p>
+  </footer>
 </body>
 </html>
