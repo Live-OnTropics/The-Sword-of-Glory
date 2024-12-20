@@ -1,4 +1,4 @@
-// Define the European map (simplified)
+// Define European countries
 const europeCountries = {
     "Germany": { color: "green", tiles: [], resources: { steel: 5, oil: 3, manpower: 10, money: 50 }, militaryUnits: [] },
     "France": { color: "blue", tiles: [], resources: { steel: 4, oil: 4, manpower: 8, money: 60 }, militaryUnits: [] },
@@ -52,10 +52,9 @@ class Tile {
     }
 }
 
-// Initialize the map with a 30x30 grid
+// Initialize the map with a 20x20 square grid
 function initializeEuropeMap(rows, cols) {
-    const hexWidth = 60;
-    const hexHeight = 60;
+    const tileSize = 50;  // Square tile size
 
     // Loop through the rows and columns to create tiles
     for (let y = 0; y < rows; y++) {
@@ -77,17 +76,17 @@ function initializeEuropeMap(rows, cols) {
             }
 
             tiles.push(tile);
-            const hex = document.createElement('div');
-            hex.classList.add('hex');
-            hex.setAttribute('data-x', x);
-            hex.setAttribute('data-y', y);
-            hex.style.left = `${x * (hexWidth * 0.75)}px`;
-            hex.style.top = `${y * (hexHeight * 0.87)}px`;
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.setAttribute('data-x', x);
+            square.setAttribute('data-y', y);
+            square.style.left = `${x * tileSize}px`;
+            square.style.top = `${y * tileSize}px`;
 
-            hex.addEventListener('click', () => handleTileClick(tile));
+            square.addEventListener('click', () => handleTileClick(tile));
 
-            mapContainer.appendChild(hex);
-            tile.element = hex;
+            mapContainer.appendChild(square);
+            tile.element = square;
         }
     }
 }
@@ -123,7 +122,7 @@ function declareWar(attacker, defender) {
 }
 
 // Example: Initialize the map and create units
-initializeEuropeMap(30, 30);
+initializeEuropeMap(20, 20);
 
 // Creating units for countries
 function createUnit(country, type, x, y) {
