@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geopolitical Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>HOI4-like Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container">
+    <div id="game">
         <div id="map-container"></div>
-        <div id="info-panel">
-            <h1>Game Info</h1>
-            <p id="current-country">Current Country: None</p>
-            <p id="resources">Resources: N/A</p>
-            <button id="end-turn">End Turn</button>
+        <div id="sidebar">
+            <h2>Game Information</h2>
+            <div id="current-country">Current Country: None</div>
+            <div id="resources">Resources: </div>
+            <div id="actions">
+                <button id="declare-war">Declare War</button>
+            </div>
         </div>
     </div>
-
     <script src="game.js"></script>
 </body>
 </html>
