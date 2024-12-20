@@ -3,30 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOI4-like Game</title>
+  <title>The Sword of Glory - v0.0.4</title>
   <link rel="stylesheet" href="styles.css">
   <script src="game.js" defer></script>
 </head>
 <body>
-  <!-- Game UI -->
   <div id="game-ui">
+    <!-- Sidebar -->
     <div id="sidebar">
+      <h1>The Sword of Glory</h1>
       <h2>Country Overview</h2>
       <div id="resources">
-        <p><strong>Oil:</strong> <span id="oil">0</span></p>
-        <p><strong>Steel:</strong> <span id="steel">0</span></p>
-        <p><strong>Food:</strong> <span id="food">0</span></p>
-        <p><strong>Manpower:</strong> <span id="manpower">0</span></p>
+        <p><strong>Oil:</strong> <span id="oil">1000</span></p>
+        <p><strong>Steel:</strong> <span id="steel">1000</span></p>
+        <p><strong>Food:</strong> <span id="food">1000</span></p>
+        <p><strong>Manpower:</strong> <span id="manpower">1000</span></p>
       </div>
-      <h3>Military Units</h3>
-      <div id="military">
-        <p>Infantry: <span id="infantry">0</span></p>
-        <p>Tanks: <span id="tanks">0</span></p>
-        <p>Aircraft: <span id="aircraft">0</span></p>
-      </div>
-      <button onclick="toggleDiplomacy()">Diplomacy</button>
+      <h3>Controlled Territories</h3>
+      <ul id="territories"></ul>
     </div>
 
+    <!-- Game Map -->
     <canvas id="game-map" width="800" height="800"></canvas>
   </div>
 </body>
