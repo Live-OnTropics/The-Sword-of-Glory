@@ -12,7 +12,12 @@ const resources = {
     document.getElementById('resource-manpower').textContent = resources.manpower;
   }
   
-  // Example: Decrement Oil
-  resources.oil -= 10;
-  updateResources();
+  // Resource accumulation (simple)
+  setInterval(() => {
+    resources.oil += 10;
+    resources.steel += 5;
+    resources.food += 20;
+    resources.manpower += 3;
+    updateResources();
+  }, 1000);
   

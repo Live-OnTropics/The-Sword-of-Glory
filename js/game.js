@@ -1,49 +1,22 @@
-// Import required modules (if in a module-based setup)
-import { drawMap, zoom } from './map.js';
-import { updateResources, resources } from './resources.js';
-
-// Initialize the Game
-function initializeGame() {
-  console.log("Initializing The Sword of Glory...");
+const countries = [
+    { name: 'Country A', resources: { oil: 500, steel: 500, food: 500, manpower: 500 }, x: 10, y: 5 },
+    { name: 'Country B', resources: { oil: 500, steel: 500, food: 500, manpower: 500 }, x: 20, y: 15 },
+  ];
   
-  // Draw the initial map
-  drawMap();
+  function updateAI() {
+    countries.forEach(country => {
+      // AI behavior (example: accumulate resources)
+      country.resources.oil += 10;
+      country.resources.steel += 5;
+      country.resources.food += 15;
+      country.resources.manpower += 3;
   
-  // Load initial resources
-  updateResources();
-
-  // Attach UI event listeners (from ui.js)
-  attachUIEvents();
-}
-
-// Attach Event Listeners for UI Buttons
-function attachUIEvents() {
-  document.getElementById('zoom-in').addEventListener('click', () => zoom(1.2));
-  document.getElementById('zoom-out').addEventListener('click', () => zoom(0.8));
-  document.getElementById('reset-view').addEventListener('click', () => resetMap());
-}
-
-// Game Loop (Runs at a set interval)
-function gameLoop() {
-  console.log("Game loop running...");
+      // Move the country around (example behavior)
+      country.x = Math.floor(Math.random() * (mapWidth / tileSize));
+      country.y = Math.floor(Math.random() * (mapHeight / tileSize));
+    });
   
-  // Example: Simulate resource generation
-  resources.oil += 1;
-  resources.food += 2;
-  updateResources();
-
-  // Example: AI or tile updates (to be implemented)
-  handleAI();
-}
-
-// Placeholder for AI Logic
-function handleAI() {
-  console.log("AI logic executed...");
-  // AI countries make decisions, expand, or react to the player's actions.
-}
-
-// Start the Game
-initializeGame();
-
-// Set the game loop to run every second
-setInterval(gameLoop, 1000);
+    drawMap();
+  }
+  
+  setInterval(updateAI, 5000);  
