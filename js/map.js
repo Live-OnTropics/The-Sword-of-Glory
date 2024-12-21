@@ -1,82 +1,91 @@
 const canvas = document.getElementById('game-map');
 const ctx = canvas.getContext('2d');
+const tileSize = 50;
 let offsetX = 0, offsetY = 0, scale = 1;
+let mapWidth = 2000, mapHeight = 1000; // For now, fixed size with infinite scroll feature
 
-// Map Properties
-const mapWidth = 1000;
-const mapHeight = 600;
-const tileSize = 20;
-const terrainColors = {
-  plains: '#d1e7a8',
-  forest: '#6d9c59',
-  mountain: '#a1a1a1',
-  water: '#5da9e9',
+const terrainImages = {
+    plains: new Image(),
+    forest: new Image(),
+    mountain: new Image(),
+    water: new Image(),
 };
 
-const units = [];
+terrainImages.plains.src = 'assets/images/terrain/plains.png';
+terrainImages.forest.src = 'assets/images/terrain/forest.png';
+terrainImages.mountain.src = 'assets/images/terrain/mountain.png';
+terrainImages.water.src = 'assets/images/terrain/water.png';
 
-// Generate a Randomized Map with Terrain Types
-const map = Array.from({ length: mapHeight / tileSize }, () =>
-  Array.from({ length: mapWidth / tileSize }, () => {
-    const terrains = Object.keys(terrainColors);
-    return terrains[Math.floor(Math.random() * terrains.length)];
-  })
-);
-
-// Military Units
-function createUnit(x, y, type) {
-  return {
-    x,
-    y,
-    type,
-    color: 'red',
-    width: tileSize,
-    height: tileSize,
-  };
+// Random Map Generation
+function generateMap() {
+    const map = [];
+    for (let y = 0; y < mapHeight / tileSize; y++) {
+        const row = [];
+        for (let x = 0; x < mapWidth / tileSize; x++) {
+            const terrains = ['plains', 'forest', 'mountain', 'water'];
+            row.push(terrains[Math.floor(Math.random() * terrains.length)]);
+        }
+        map.push(row);
+    }
+    return map;
 }
 
-// Add a unit on the map at a specific tile
-units.push(createUnit(5, 5, 'infantry'));
-units.push(createUnit(10, 10, 'tank'));
+let map = generateMap();
 
 function drawMap() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw Terrain
-  map.forEach((row, y) => {
-    row.forEach((terrain, x) => {
-      ctx.fillStyle = terrainColors[terrain];
-      ctx.fillRect(x * tileSize + offsetX, y * tileSize + offsetY, tileSize, tileSize);
-    });
-  });
-
-  // Draw Units
-  units.forEach(unit => {
-    ctx.fillStyle = unit.color;
-    ctx.fillRect(unit.x * tileSize + offsetX, unit.y * tileSize + offsetY, unit.width, unit.height);
-  });
+    // Draw Map with Textures
+    for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+            const terrain = map[y][x];
+            ctx.drawImage(
+                terrainImages[terrain],
+                x * tileSize + offsetX, y * tileSize + offsetY,
+                tileSize, tileSize
+            );
+        }
+    }
 }
 
 function zoom(factor) {
-  scale = Math.min(3, Math.max(0.5, scale * factor));
-  ctx.scale(scale, scale);
-  drawMap();
+    scale = Math.min(3, Math.max(0.5, scale * factor));
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.scale(scale, scale);
+    drawMap();
 }
 
+function pan(dx, dy) {
+    offsetX += dx;
+    offsetY += dy;
+    drawMap();
+}
+
+// Canvas Interactions
 canvas.addEventListener('mousedown', (e) => {
-  // Drag functionality for units
-  const mouseX = (e.clientX - canvas.offsetLeft - offsetX) / scale;
-  const mouseY = (e.clientY - canvas.offsetTop - offsetY) / scale;
-
-  // Find the unit closest to mouse click
-  const selectedUnit = units.find(unit => {
-    return (
-      mouseX >= unit.x && mouseX <= unit.x + unit.width &&
-      mouseY >= unit.y && mouseY <= unit.y + unit.height
-    );
-  });
-
-  if (selectedUnit) {
-    console.log('Unit Selected', selectedUnit);
-  }
+    const mouseX = (e.clientX - canvas.offsetLeft - offsetX) / scale;
+    const mouseY = (e.clientY - canvas.offsetTop - offsetY) / scale;
+    
+    // Handle unit selection or interaction
 });
+
+canvas.addEventListener('wheel', (e) => {
+    if (e.deltaY > 0) {
+        zoom(0.8);
+    } else {
+        zoom(1.2);
+    }
+});
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') pan(0, 10);
+    if (e.key === 'ArrowDown') pan(0, -10);
+    if (e.key === 'ArrowLeft') pan(10, 0);
+    if (e.key === 'ArrowRight') pan(-10, 0);
+});
+
+// Initialize the map
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+drawMap();

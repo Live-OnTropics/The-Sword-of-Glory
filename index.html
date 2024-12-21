@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Sword of Glory</title>
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/sidebar.css">
-  <link rel="stylesheet" href="css/map.css">
-  <script src="js/map.js" defer></script>
-  <script src="js/ui.js" defer></script>
-  <script src="js/resources.js" defer></script>
-  <script src="js/game.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sword of Glory</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/map.css">
 </head>
 <body>
-  <header id="game-header">
-    <img src="assets/images/logo.png" alt="The Sword of Glory Logo" id="game-logo">
-    <h1>The Sword of Glory</h1>
-  </header>
-  <main id="game-container">
-    <aside id="sidebar">
-      <div id="resource-panel">
-        <h2>Country Resources</h2>
-        <ul>
-          <li><strong>Oil:</strong> <span id="resource-oil">1000</span></li>
-          <li><strong>Steel:</strong> <span id="resource-steel">1000</span></li>
-          <li><strong>Food:</strong> <span id="resource-food">1000</span></li>
-          <li><strong>Manpower:</strong> <span id="resource-manpower">1000</span></li>
-        </ul>
-      </div>
-      <div id="controls">
-        <button id="zoom-in">Zoom In</button>
-        <button id="zoom-out">Zoom Out</button>
-        <button id="reset-view">Reset Map</button>
-      </div>
-    </aside>
-    <section id="map-container">
-      <canvas id="game-map"></canvas>
-    </section>
-  </main>
-  <footer>
-    <p>© 2024 The Sword of Glory</p>
-  </footer>
+    <div id="game-container">
+        <div id="sidebar">
+            <h2>The Sword of Glory</h2>
+            <div id="resources">
+                <p>Oil: <span id="resource-oil">0</span></p>
+                <p>Steel: <span id="resource-steel">0</span></p>
+                <p>Food: <span id="resource-food">0</span></p>
+                <p>Manpower: <span id="resource-manpower">0</span></p>
+            </div>
+            <div id="controls">
+                <button id="create-unit">Create Unit</button>
+                <button id="zoom-in">Zoom In</button>
+                <button id="zoom-out">Zoom Out</button>
+                <button id="reset-view">Reset View</button>
+            </div>
+        </div>
+        <canvas id="game-map"></canvas>
+    </div>
+
+    <script src="js/map.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/resources.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
