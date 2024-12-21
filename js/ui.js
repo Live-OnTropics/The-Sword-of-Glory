@@ -10,3 +10,11 @@ document.getElementById('reset-view').addEventListener('click', () => {
 document.getElementById('create-unit').addEventListener('click', () => {
     createUnit(5, 5, 'infantry');
 });
+
+document.getElementById('build-factory').addEventListener('click', () => {
+    buildStructure('factory');
+});
+
+document.getElementById('build-base').addEventListener('click', () => {
+    buildStructure('military-base');
+});

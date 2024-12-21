@@ -2,7 +2,7 @@ const canvas = document.getElementById('game-map');
 const ctx = canvas.getContext('2d');
 const tileSize = 50;
 let offsetX = 0, offsetY = 0, scale = 1;
-let mapWidth = 2000, mapHeight = 1000; // For now, fixed size with infinite scroll feature
+let mapWidth = 2000, mapHeight = 1000; // Fixed size for infinite scroll feature
 
 const terrainImages = {
     plains: new Image(),
@@ -16,7 +16,6 @@ terrainImages.forest.src = 'assets/images/terrain/forest.png';
 terrainImages.mountain.src = 'assets/images/terrain/mountain.png';
 terrainImages.water.src = 'assets/images/terrain/water.png';
 
-// Random Map Generation
 function generateMap() {
     const map = [];
     for (let y = 0; y < mapHeight / tileSize; y++) {
@@ -34,8 +33,6 @@ let map = generateMap();
 
 function drawMap() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw Map with Textures
     for (let y = 0; y < map.length; y++) {
         for (let x = 0; x < map[y].length; x++) {
             const terrain = map[y][x];
@@ -62,7 +59,6 @@ function pan(dx, dy) {
     drawMap();
 }
 
-// Canvas Interactions
 canvas.addEventListener('mousedown', (e) => {
     const mouseX = (e.clientX - canvas.offsetLeft - offsetX) / scale;
     const mouseY = (e.clientY - canvas.offsetTop - offsetY) / scale;
