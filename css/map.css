@@ -1,0 +1,11 @@
+#map-container {
+    flex: 1;
+    position: relative;
+  }
+  
+  #game-map {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+  
